@@ -16,6 +16,7 @@ import { generatedRuleDocs } from './plugins/generated-rule-docs';
 import { parseFrontMatter } from './plugins/og-images/parseFrontMatter';
 import { socialImageAlt } from './plugins/og-images/socialImageAlt';
 import { rulesMeta } from './rulesMeta';
+import { astFixtureLinks } from './tools/typedoc-plugin-ast-fixture-links';
 
 const remarkPlugins: MDXPlugin[] = [[npm2yarnPlugin, { sync: true }]];
 
@@ -427,7 +428,10 @@ const config: Config = {
         out: `../../docs/packages/${packageName}/generated`,
         outputFileStrategy: 'modules',
         parametersFormat: 'table',
-        plugin: [require.resolve('./tools/typedoc-plugin-no-inherit-fork.mjs')],
+        plugin: [
+          require.resolve('./tools/typedoc-plugin-no-inherit-fork.mjs'),
+          ...(packageName === 'ast-spec' ? [astFixtureLinks] : []),
+        ],
         propertiesFormat: 'table',
         readme: 'none',
         tsconfig: `../${packageName}/tsconfig.json`,
